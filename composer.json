@@ -1,0 +1,17 @@
+{
+    "name": "ahmet/laravel-flag-system",
+    "description": "Add flag(s) to database and manage them.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ahmet",
+            "email": "ahmetcelikezer@icloud.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {"ahmetcelikezer\\laravelFlagSystem\\": "src/"}
+    }
+}
