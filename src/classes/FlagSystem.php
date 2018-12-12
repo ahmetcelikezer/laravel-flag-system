@@ -24,9 +24,11 @@
 
     public $errors = array();               // If any exception is occurs, this array fill with those
     private static $exceptions = array(     // Exception's with their keys and messages
+        'none'          => 'Unknown error occured, please report this exception on Github: ahmetcelikezer/laravel-flag-system',
         'exists'        => 'Flag is already exists!',
         'maxlength'     => 'Max flag title length is 50!',
-        'dbsaveunknown' => 'Unknown error occured while flag saving to database !?'
+        'onlynumbers'   => 'Flag must contain 1 letter at least!',
+        'dbsaveunknown' => 'Unknown error occured while flag saving to database !?',
     );
 
 
@@ -36,6 +38,7 @@
 
     public function __construct(){
         //
+       
        
     }
 
@@ -96,13 +99,29 @@
         // Create Flag
         if(DB::table(self::$flagsTable)->insert(['title' => $this->trimFlagName($this->title)])){
 
-            return true;                    // Flag is created         
+            return true;                    // Flag is created
         }
         else{
-
             return $this->throwException('dbsaveunknown');
         }
 
+    }
+
+
+    ////
+
+
+    /**
+     * Upadates the flag title
+     * @param integer,string $this->id
+     * @param string $this->flag
+     */
+    public function updateFlag(){
+
+        // Update if is exists
+        if($this->searchFlag($this->id) || $this->searchFlag($this->flag)){
+            // HERE
+        }
     }
 
 
@@ -158,9 +177,10 @@
 
             $flagName = $this->title;
         }
-
         // Remove spaces and make lowercase all chars str_replace(' ', '', $sentence);
-        return (String)str_replace(' ', '', mb_strtolower($flagName));
+        preg_match_all("/[0-9]/", $flagName) == strlen($flagName) ? $this->throwException('onlynumbers') : $flagName = (String)str_replace(' ', '', mb_strtolower($flagName));
+        
+        return $flagName;
     }
 
     /**
@@ -173,8 +193,8 @@
 
         array_push($this->errors, self::$exceptions[$errCode]);
 
-        if($isFatal == true){
-           return false;
+        if($isFatal === true){
+            trigger_error(self::$exceptions[$errCode], E_USER_ERROR);
         }
         
     }
