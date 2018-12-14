@@ -1,11 +1,5 @@
-<<<<<<< HEAD
-[![Build Status](https://travis-ci.org/laravel-flag-system}.png?branch=master)](https://travis-ci.org/ahmetcelikezer/laravel-flag-system)
-
-# Laravel Flag System
-=======
 # Laravel Flag System - [ In Dev - Not Usable For Now]
 [![Build Status](https://travis-ci.org/ahmetcelikezer/laravel-flag-system}.png?branch=master)](https://travis-ci.org/ahmetcelikezer/laravel-flag-system)
->>>>>>> 1369d57279e05712cd386af3132e968acaeeb51c
 
 This package is in development stage, i will create manual right after my first release. The main idea is you can assign flags (flags are like hashtags) to any data in your any database table and you can manage, check these flags.
 
@@ -17,7 +11,7 @@ Add laravel-flag-system to your composer.json using this command bellow:
 $ composer require ahmetcelikezer/laravel-flag-system
 ```
 
-Next if you are using Laravel 5.5 or newer version, Laravel Package Auto-Discovery will add this service provider automatically.
+Next if you are using Laravel 5.5 or newer version, Laravel Package Auto-Discovery will add this service provider automaticly.
 
 If you are using Laravel 5.4 or older version, you must add provider manually. Use the steps bellow:
 
