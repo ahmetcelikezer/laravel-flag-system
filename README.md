@@ -11,7 +11,7 @@ Add laravel-flag-system to your composer.json using this command bellow:
 $ composer require ahmetcelikezer/laravel-flag-system
 ```
 
-Next if you are using Laravel 5.5 or newer version, Laravel Package Auto-Discovery will add this service provider automaticly.
+Next if you are using Laravel 5.5 or newer version, Laravel Package Auto-Discovery will add this service provider automatically.
 
 If you are using Laravel 5.4 or older version, you must add provider manually. Use the steps bellow:
 
