@@ -11,6 +11,7 @@
 
  # Required Classes
  use Illuminate\Support\Facades\DB;
+ use Illuminate\Support\Facades\Schema;
 
 
  class FlagSystem{
@@ -29,7 +30,12 @@
         'maxlength'     => 'Max flag title length is 50!',
         'onlynumbers'   => 'Flag must contain 1 letter at least!',
         'dbsaveunknown' => 'Unknown error occured while flag saving to database !?',
+        'dbTableMissing'=> 'laravel-flag-system\'s table missing! Please run "php artisan migrate" first!',
+        'flagnotfound'  => 'Flag not found!',
     );
+
+    # Temporary Properties
+    private $_tmpSearchFlag = [];
 
 
 
@@ -37,13 +43,18 @@
     # Constructor & Destructor
 
     public function __construct(){
-        //
-       
-       
+        
+        // Check if package has its own data table
+       return Schema::hasTable(self::$flagsTable) ?  : $this->throwException('dbTableMissing');
     }
 
     public function __destruct(){
-        //
+        
+        // Clear Cache
+        unset(
+            $this->_tmpSearchFlag
+        );
+        
     }
 
     ###
@@ -97,13 +108,7 @@
         }
 
         // Create Flag
-        if(DB::table(self::$flagsTable)->insert(['title' => $this->trimFlagName($this->title)])){
-
-            return true;                    // Flag is created
-        }
-        else{
-            return $this->throwException('dbsaveunknown');
-        }
+        return DB::table(self::$flagsTable)->insert(['title' => $this->trimFlagName($this->title)]) ? true : $this->throwException('dbsaveunknown');
 
     }
 
@@ -120,8 +125,14 @@
 
         // Update if is exists
         if($this->searchFlag($this->id) || $this->searchFlag($this->flag)){
-            // HERE
+
+            return DB::table(self::$flagsTable)->where('id', $this->_tmpSearchFlag['data'])->update(['title'=>$this->trimFlagName($this->title)]) ? true : false;
         }
+
+        // Not Found
+        $this->throwException('flagnotfound', false);
+        return false;
+        
     }
 
 
@@ -144,19 +155,30 @@
             $searchFlag = $this->title;
         }
         
-        if(DB::table(self::$flagsTable)->where('title', $this->trimFlagName($searchFlag))->count() > 0){
+        $flagQuery = DB::table(self::$flagsTable)->select('id')->where('title', $this->trimFlagName($searchFlag))->first();
+        if($flagQuery){
 
-            // Founded by Title
+            // Founded by Title & stored at temp
+            $this->_tmpSearchFlag = [
+                'type'  => 'id',
+                'data'  =>  $flagQuery->id
+            ];
+
             return true;
         }
         else if(DB::table(self::$flagsTable)->where('id', $searchFlag)->count() > 0){
 
-            // Founded by Id
+            // Founded by Id & stored at temp
+            $this->_tmpSearchFlag = [
+                'type'  => 'id',
+                'data'  =>  $searchFlag
+            ];
+
             return true;
         }
         else{
 
-            // Not Found
+            // Flag not found
             return false;
         }
     }
@@ -183,6 +205,10 @@
         return $flagName;
     }
 
+
+    ////
+
+
     /**
      * Exception creator
      * @param string $errCode
@@ -191,12 +217,13 @@
      */
     private function throwException($errCode, $isFatal = true){
 
-        array_push($this->errors, self::$exceptions[$errCode]);
-
         if($isFatal === true){
             trigger_error(self::$exceptions[$errCode], E_USER_ERROR);
         }
-        
+
+        array_search(self::$exceptions[$errCode], $this->errors) ?: array_push($this->errors, self::$exceptions[$errCode]);
+
+        return;
     }
 
  }
