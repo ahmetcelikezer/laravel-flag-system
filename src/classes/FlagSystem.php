@@ -14,14 +14,15 @@
  use Illuminate\Support\Facades\Schema;
 
 
- class FlagSystem{
+ class FlagSystem extends FlagRelations{
 
     private static $flagsTable = 'flags';   // Default flags table
 
     public $title;                          // Title for/of target flag
-    public $id;                             // Id of target flag
+    public $id;                             // Id of target flag or targetID
     public $target;                         // Target table for the data
     public $flag;                           // Flag id or title to set target data
+    public $flags;                           // Flag id(s) or title(s) to set target data
 
     public $errors = array();               // If any exception is occurs, this array fill with those
     private static $exceptions = array(     // Exception's with their keys and messages
@@ -32,10 +33,12 @@
         'dbsaveunknown' => 'Unknown error occured while flag saving to database !?',
         'dbTableMissing'=> 'laravel-flag-system\'s table missing! Please run "php artisan migrate" first!',
         'flagnotfound'  => 'Flag not found!',
+        'hasnoflag'     => 'Can not find any flag for this target.',
     );
 
     # Temporary Properties
     private $_tmpSearchFlag = [];
+    private $_tmpSearchIDStore = [];
 
 
 
@@ -157,8 +160,9 @@
         
         $flagQuery = DB::table(self::$flagsTable)->select('id')->where('title', $this->trimFlagName($searchFlag))->first();
         if($flagQuery){
-
+            
             // Founded by Title & stored at temp
+            array_push($this->_tmpSearchIDStore, $flagQuery->id);
             $this->_tmpSearchFlag = [
                 'type'  => 'id',
                 'data'  =>  $flagQuery->id
@@ -169,6 +173,8 @@
         else if(DB::table(self::$flagsTable)->where('id', $searchFlag)->count() > 0){
 
             // Founded by Id & stored at temp
+            
+            array_push($this->_tmpSearchIDStore, $searchFlag);
             $this->_tmpSearchFlag = [
                 'type'  => 'id',
                 'data'  =>  $searchFlag
@@ -224,6 +230,70 @@
         array_search(self::$exceptions[$errCode], $this->errors) ?: array_push($this->errors, self::$exceptions[$errCode]);
 
         return;
+    }
+
+    /**
+     * Creates flag record for pointed data inside the pointed table.
+     * @param string    $target : This is the target database table name Ex. (users)
+     * @param integer   $id     : This is the target id for target table's data. Ex. (user id : 5)
+     * @param array     $flags  : This is the flags array contains the flags to add target.
+     */
+    public function addFlag(){
+
+        // Check is flags exists
+        foreach($this->flags as $flag){
+
+            if(!$this->searchFlag($flag)){
+                $this->throwException('flagnotfound');
+            }
+        }
+        
+        // Set the values
+        $relation = new FlagRelations;
+        $relation->flags    = $this->_tmpSearchIDStore;
+        $relation->table    = $this->target;
+        $relation->targetID = $this->id;
+
+        // Execute
+        return $relation->add();
+    }
+
+
+    private function convertFlagName($flag){
+
+        return DB::table(self::$flagsTable)->where('id', $flag)->select('title')->first()->title;
+    }
+
+    /**
+     * List of targets flags
+     * @param integer $targetID
+     * @param string $table
+     * @return array
+     */
+    public function getFlags($returnAsID = true){
+
+        // Get Flags First
+        $flags = new FlagRelations;
+        $flags->targetID    = $this->id;
+        $flags->table       = $this->target;
+
+        $flagsArray = $flags->ownedFlags();
+
+        if($flagsArray === false){return false;}
+
+        if($returnAsID){
+            //
+            return $flagsArray;
+        }
+
+        $return = array();
+        foreach($flagsArray as $flag){
+            
+            array_push($return, $this->convertFlagName($flag));
+        }
+        return $return;
+        
+        //
     }
 
  }
