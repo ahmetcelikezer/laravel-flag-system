@@ -7,5 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Relations extends Model
 {
 
-    protected $table = 'flag_relations';
+    private $tableName = require(__DIR__ . 'config.php')['relations_table'];
+    protected $table = $this->tableName;
 }

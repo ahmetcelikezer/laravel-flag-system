@@ -6,6 +6,10 @@ use Illuminate\Database\Migrations\Migration;
 
 class FlagRelation extends Migration
 {
+
+    // Table name
+    private $tableName = require(__DIR__ . 'config.php')['relations_table'];
+
     /**
      * Run the migrations.
      *
@@ -13,8 +17,7 @@ class FlagRelation extends Migration
      */
     public function up()
     {
-        //
-        Schema::create('flag_relations', function (Blueprint $table) {
+        Schema::create($this->tableName, function (Blueprint $table) {
             $table->increments('id');
             $table->json('flags');
             $table->char('targetTable', 64);
@@ -30,7 +33,6 @@ class FlagRelation extends Migration
      */
     public function down()
     {
-        //
-        Schema::dropIfExists('flag_relations');
+        Schema::dropIfExists($this->tableName);
     }
 }
