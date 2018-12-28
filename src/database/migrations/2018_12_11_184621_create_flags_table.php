@@ -6,6 +6,10 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateFlagsTable extends Migration
 {
+    
+    // Table name
+    private $tableName = require(__DIR__ . 'config.php')['flags_table'];
+
     /**
      * Run the migrations.
      *
@@ -13,7 +17,7 @@ class CreateFlagsTable extends Migration
      */
     public function up()
     {
-        Schema::create('flags', function (Blueprint $table) {
+        Schema::create($this->tableName, function (Blueprint $table) {
             $table->increments('id');
             $table->string('title', 50); // Max title length is 50
             // $table->timestamps();
@@ -27,6 +31,6 @@ class CreateFlagsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('flags');
+        Schema::dropIfExists($this->tableName);
     }
 }

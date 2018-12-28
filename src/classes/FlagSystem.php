@@ -232,6 +232,10 @@
         return;
     }
 
+
+    ////
+
+
     /**
      * Creates flag record for pointed data inside the pointed table.
      * @param string    $target : This is the target database table name Ex. (users)
@@ -259,10 +263,40 @@
     }
 
 
+    ////
+
+
+    /**
+     * Remove flag from and table and data
+     * @param integer $flagID : Target flag to remove
+     * @return boolean
+     */
+    public function removeFlag(){
+
+        if($this->searchFlag($this->id) || $this->searchFlag($this->flag)){
+
+            return DB::table(self::$flagsTable)->where('id', $this->_tmpSearchFlag['data'])->delete() ? true : false;
+        }
+
+    }
+
+
+    ////
+
+
+    /**
+     * Converts flag id to flag title
+     * @param integer $flag : ID of requested flag
+     * @return string : Title of requested flag
+     */
     private function convertFlagName($flag){
 
         return DB::table(self::$flagsTable)->where('id', $flag)->select('title')->first()->title;
     }
+
+
+    ////
+
 
     /**
      * List of targets flags
