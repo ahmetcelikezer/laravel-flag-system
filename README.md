@@ -3,16 +3,16 @@
 
 >NOTE: Project is not ready to launch! Stable Version 1.0 will be released soon.
 
-[Installation](#installation)
-[How to use](#how-to-use)
-&nbsp;&nbsp;[Creating Flag](#creating-new-flag)
-&nbsp;&nbsp;&nbsp;&nbsp;[Single Creation](#creating-single-flag)
-&nbsp;&nbsp;&nbsp;&nbsp;[Multiple Creation](#creating-multiple-flag)
-&nbsp;&nbsp;[Update Flag Title](#update-flag-title)
-&nbsp;&nbsp;&nbsp;&nbsp;[Update By Title](#update-flag-title-by-title)
-&nbsp;&nbsp;&nbsp;&nbsp;[Update By ID](#update-flag-title-by-id)
-&nbsp;&nbsp;[Disconntect Flag](#disconnect-flag)
-&nbsp;&nbsp;&nbsp;&nbsp;[Disconntect By Title](#disconnect-flag-by-title)
+[Installation](#installation)<br>
+[How to use](#how-to-use)<br>
+&nbsp;&nbsp;[Creating Flag](#creating-new-flag)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;[Single Creation](#creating-single-flag)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;[Multiple Creation](#creating-multiple-flag)<br>
+&nbsp;&nbsp;[Update Flag Title](#update-flag-title)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;[Update By Title](#update-flag-title-by-title)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;[Update By ID](#update-flag-title-by-id)<br>
+&nbsp;&nbsp;[Disconntect Flag](#disconnect-flag)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;[Disconntect By Title](#disconnect-flag-by-title)<br>
 &nbsp;&nbsp;&nbsp;&nbsp;[Disconntect By ID](#disconnect-flag-by-id)
 
 ## Installation # {#installation}
