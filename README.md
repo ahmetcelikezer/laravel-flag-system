@@ -1,5 +1,5 @@
 # Laravel Flag System - Development Test
-[![Build Status](https://travis-ci.org/ahmetcelikezer/laravel-flag-system}.png?branch=master)](https://travis-ci.org/ahmetcelikezer/laravel-flag-system)
+[![CircleCI](https://circleci.com/gh/ahmetcelikezer/laravel-flag-system/tree/master.svg?style=svg)](https://circleci.com/gh/ahmetcelikezer/laravel-flag-system/tree/master)
 
 >NOTE: Project is not ready to launch! Stable Version 1.0 will be released soon.
 
